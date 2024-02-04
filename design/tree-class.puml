@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Data {
+    + value
+}
+
+class Node {
+    + isRoot: boolean
+    + isLeaf: boolean
+    + depth: number
+    + dataList: List[Data]
+    + add(data: Data)
+    + delete(data: Data)
+    + getDegree()
+}
+
+interface Tree {
+    + root: Node
+    +{abstract} add(data: Data)
+    +{abstract} delete(data: Data)
+}
+
+interface BalanceTree {
+    + maxDegree: number
+    +{abstract} checkRebalancing()
+    +{abstract} rebalance(node: Node)
+}
+
+class BMinusTree {
+}
+
+class BPlusTree {
+}
+
+BalanceTree <|-- BMinusTree
+BalanceTree <|-- BPlusTree
+Tree <|-- BalanceTree
+
+Data -* Node
+Node -* Tree
+@enduml
