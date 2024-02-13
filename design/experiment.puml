@@ -1,0 +1,103 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class RecordManager {
+    - recorderHashTable: HashMap<String,RecorderList>
+    - temporaryRecoderHashTable: HashMap<String,Recorder>
+    + start(name)
+    + stop(name)
+}
+class Recorder {
+    + start()
+    + stop()
+    + getRecord()
+}
+class RecorderList {
+    + addRecoder()
+    + getRecords()
+    + getAverage()
+    + getSum()
+    + getCount()
+}
+interface DataAdder {
+    + getNewId()
+    + getName()
+}
+class CustomIdDataAdder
+class CustomIdGenerator {
+    + getFullId()
+    + getTemporaryId()
+    - getMaxBit()
+    + getYear()
+    + getChatRoom()
+    + getTimeStamp()
+}
+class NumericDataAdder
+
+
+DataAdder <|-- CustomIdDataAdder
+DataAdder <|-- NumericDataAdder
+
+CustomIdDataAdder *-- CustomIdGenerator
+
+RecorderList *- Recorder
+RecordManager *-- RecorderList
+RecordManager *-- Recorder
+
+class Experiment {
+    - numOfData = 10000
+    - dataAdder: DataAdder
+    - indexTree: Tree
+    - makeIndex: Boolean
+    - addDatas(num=numOfData)
+    + doExperiment()
+    + setNumOfData()
+    + setDataAdder()
+    + setIndexTree()
+    + resolveExperimentName()
+}
+
+class Data {
+    + value
+}
+
+class Node {
+    + isRoot: boolean
+    + isLeaf: boolean
+    + depth: number
+    + dataList: List[Data]
+    + add(data: Data)
+    + delete(data: Data)
+    + getDegree()
+}
+
+interface Tree {
+    + root: Node
+    +{abstract} add(data: Data)
+    +{abstract} delete(data: Data)
+}
+
+interface BalanceTree {
+    + maxDegree: number
+    +{abstract} checkRebalancing()
+    +{abstract} rebalance(node: Node)
+}
+
+class BMinusTree {
+}
+
+class BPlusTree {
+}
+
+BalanceTree <|-- BMinusTree
+BalanceTree <|-- BPlusTree
+Tree <|-- BalanceTree
+
+Node *- Data
+Tree *- Node
+
+Experiment *-- DataAdder
+Experiment *-- RecordManager
+Experiment *- Tree
+
+@enduml
