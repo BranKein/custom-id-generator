@@ -75,20 +75,21 @@ class CustomIdGenerator:
                 | self.sequence)
 
     def get_curr_stmp(self):
-        curr_stmp = self.get_next_stmp()
+        curr_stmp = math.floor(time.time() * 1000)
         if curr_stmp < self.last_stamp:
             raise RuntimeError("Clock moved backwards")
 
         if curr_stmp == self.last_stamp:
             self.sequence = (self.sequence + 1) & get_max_bit(self.SEQUENCE_BIT)
             if self.sequence == 0:
-                curr_stmp = self.get_next_stmp()
+                curr_stmp = self.get_next_mill()
         else:
             self.sequence = 0
 
         self.last_stamp = curr_stmp
+        return self.last_stamp
 
-    def get_next_stmp(self):
+    def get_next_mill(self):
         stmp = math.floor(time.time() * 1000)
         while stmp <= self.last_stamp:
             stmp = math.floor(time.time() * 1000)
